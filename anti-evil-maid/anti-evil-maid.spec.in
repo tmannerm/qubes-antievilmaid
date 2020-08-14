@@ -1,12 +1,12 @@
 %define name anti-evil-maid
-%define subdir %{?qubes_builder:%{name}/}
-%define _builddir %(pwd)/%{subdir}
-%{!?version: %define version %(cat %{subdir}version)}
+%if 0%{?qubes_builder}
+%define _builddir %(pwd)/%{name}/
+%endif
 
 Name:		%{name}
-Version:	%{version}
+Version:	@VERSION@
 Release:	1%{?dist}
-Summary:    	Anti Evil Maid for initramfs-based systems.
+Summary:	Anti Evil Maid for initramfs-based systems.
 Requires:	dracut grub2-tools parted tboot tpm-tools
 Requires:	tpm-extra >= 4.0.0
 Requires:	trousers-changer >= 4.0.0
@@ -19,11 +19,15 @@ Vendor:		Invisible Things Lab
 License:	GPL
 URL:		http://www.qubes-os.org
 
+Source0:    %{name}-%{version}.tar.gz
+
 %description
 Anti Evil Maid for initramfs-based systems.
 
-%install
+%prep
+%setup -q
 
+%install
 mkdir -p $RPM_BUILD_ROOT/usr
 cp -r sbin $RPM_BUILD_ROOT/usr
 
